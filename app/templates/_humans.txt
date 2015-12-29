@@ -1,0 +1,20 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Look Listen Front End Dev
+
+# THANKS
+
+    Yeoman
+
+# TECHNOLOGY COLOPHON
+
+    HTML5
+    CSS3
+    Sass
+    jQuery
+    Modernizr
+    Normalize.css
+    Gulp

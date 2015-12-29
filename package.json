@@ -1,0 +1,35 @@
+{
+  "name": "generator-ll-prototype",
+  "version": "0.1.0",
+  "description": "A simple yeoman generator for quick prototyping. Uses gulp, handlebars, and sass",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "DeanGilewicz/generator-ll-prototype"
+  },
+  "author": {
+    "name": "Dean Gilewicz",
+    "email": "gilewiczd@gmail.com",
+    "url": "https://github.com/DeanGilewicz"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "yeoman-generator": "^0.20.2",
+    "yosay": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
+
+

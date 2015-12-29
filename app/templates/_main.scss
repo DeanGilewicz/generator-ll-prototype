@@ -1,0 +1,22 @@
+// External imports
+<% if (includeFoundation) { %>@import '../../bower_components/foundation/scss/normalize.scss';
+@import '../../bower_components/foundation/scss/foundation/components/grid'; <% } else { %>
+@import '../../bower_components/normalize-scss/normalize.scss'; <% } %>
+
+// Variables
+$white: #fff;
+$grey: #ccc;
+$text: #222;
+$blue: #009ACD;
+$green: #228B22;
+
+// Global
+@import 'global';
+
+// Partials
+@import 'header';
+@import 'footer';
+
+// Pages
+@import 'index'; // home
+@import 'about/index'; // about

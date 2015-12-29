@@ -1,0 +1,11 @@
+<footer>
+	<% if (includeFoundation) { %><div class="row">
+		<div class="small-6 columns">
+			<p>Foundation Column 1</p>
+		</div>
+		<div class="small-6 columns">
+			<p>Foundation Column 2</p>
+		</div>
+	</div><% } else { %><p>This is the footer</p><% } %>
+	{{> footer-includes}}
+</footer>

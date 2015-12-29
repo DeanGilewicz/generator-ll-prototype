@@ -1,0 +1,11 @@
+{
+	"home": {
+		"meta-title": "home page",
+		"meta-description": "This description is coming from the data json file"
+	},
+	"about": {
+		"meta-title": "about page",
+		"meta-description": "This description is coming from the data json file.",
+		"title": "This is the About Page"
+	}
+}
