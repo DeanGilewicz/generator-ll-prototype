@@ -1,11 +1,13 @@
-### Thank you for checking out my Yeoman generator.
+## Thank you for checking out my Yeoman generator.
 
-## To use this generator, please ensure you have installed Yeoman globally on your machine, npm install -g yo. Visit http://yeoman.io/ for more details.
+To use this generator, please ensure you have installed Yeoman globally on your machine, npm install -g yo. Visit http://yeoman.io/ for more details.
 
 
 ### Installation & Usage
 
-To install: install this generator globally on your machine 
+To install: 
+
+install this generator globally on your machine 
 
 npm install -g generator-ll-prototype
 
@@ -105,17 +107,17 @@ yo ll-prototype
 
 ### Gulp
 
-# Please see comments in gulpfile.js for more information but basically Gulp:
+Please see comments in gulpfile.js for more information but basically Gulp will:
 
-will create a dist folder for deployment
+- create a dist folder for deployment
 
-lint and minify js
+- lint and minify js
 
-move vendor js
+- move vendor js
 
-compile and minify sass
+- compile and minify sass
 
-compile handlebars templates (partials) into .html files
+- compile handlebars templates (partials) into .html files
 
-watches for any changes and includes livereload
+- watch for any changes and includes livereload
 
