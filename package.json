@@ -1,6 +1,6 @@
 {
   "name": "generator-ll-prototype",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A simple yeoman generator for quick prototyping. Uses gulp, handlebars, and sass",
   "main": "app/index.js",
   "scripts": {

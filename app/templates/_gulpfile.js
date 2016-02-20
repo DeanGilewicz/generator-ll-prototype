@@ -1,17 +1,17 @@
 var gulp = require('gulp'),
-	gutil = require('gulp-util'),
-	sass = require('gulp-ruby-sass'),
-	autoprefixer = require('gulp-autoprefixer'),
-	minifycss = require('gulp-minify-css'),
-	concat = require('gulp-concat'),
-	jshint = require('gulp-jshint'),
-	uglify = require('gulp-uglify'),
-	sourcemaps = require('gulp-sourcemaps'),
+	autoprefixer = require('autoprefixer'),
+	cssnano = require('cssnano'),
+	del = require('del'),
+	fs = require('fs'),
 	handlebars = require('gulp-compile-handlebars'),
-	php = require('gulp-compile-handlebars'),
-	rename = require('gulp-rename'),
+	jshint = require('gulp-jshint'),
 	livereload = require('gulp-livereload'),
-	fs = require('fs');
+	postcss = require('gulp-postcss'),
+	rename = require('gulp-rename'),
+	sass = require('gulp-sass'),
+	sourcemaps = require('gulp-sourcemaps'),
+	uglify = require('gulp-uglify');
+
 	// data = require('./data/data.json');
 	// json data for templates - require does cache the result making it unsuitable to read/modify/read-again otherwise have to continually restart gulp to see updates to data
 
@@ -51,7 +51,7 @@ gulp.task('minify-main-js', function() {
 });
 
 	// place vendor js into dist folder
-
+<% if (includeFoundation || includeJQuery) { %>
 gulp.task('vendor-scripts', function() { <% if (includeFoundation) { %>
 	return gulp.src(['bower_components/modernizr/modernizr.js',
   					'bower_components/fastclick/lib/fastclick.js',
@@ -59,31 +59,26 @@ gulp.task('vendor-scripts', function() { <% if (includeFoundation) { %>
 	return gulp.src('bower_components/jquery/dist/jquery.min.js') <% } %>
     .pipe(gulp.dest('dist/js/vendor'));
 });
-
+<% } %>
 
 // SASS
 
-	// compile sass into css 
+	// compile sass into css and minify - place into dist folder
 
-gulp.task('compile-sass', function() {
-	return sass('styles/sass/main.scss', { style: 'expanded' })
-  	.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-  	.pipe(gulp.dest('dist/css'))
-    .pipe(livereload())
-});
-
-	// minify css stylesheet - place into dist folder
-
-gulp.task('minify-css', ['compile-sass'], function() {
-	return gulp.src('dist/css/main.css')
+gulp.task('minify-css', function() {
+	var processors = [
+		autoprefixer({browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4']}),
+		cssnano
+	];
+	return gulp.src('styles/sass/main.scss')
+		.pipe(sass({ outputStyle: 'expanded' }))
 		.pipe(sourcemaps.init())
-		.pipe(minifycss())
+		.pipe(postcss(processors))
 		.pipe(rename('main.min.css'))
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('dist/css'))
 		.pipe(livereload());
 });
-
 
 // HANDLEBARS
 
@@ -145,7 +140,7 @@ gulp.task('default', ['express', 'watch', 'jshint', 'minify-css', 'minify-main-j
 
 	// register initial gulp tasks
 
-gulp.task('build', ['vendor-scripts', 'minify-css', 'minify-main-js', 'handlebars'], function() {
+gulp.task('build', [<% if (includeFoundation || includeJQuery) { %>'vendor-scripts', <% } %>'minify-css', 'minify-main-js', 'handlebars'], function() {
 	console.log('Your development environment has been set up. Run gulp to watch and build your project!');
 });
 

@@ -64,7 +64,7 @@ var llPrototype = yeoman.generators.Base.extend({
                     when: function (answers) {
                 return answers.includeFoundation === false;
                 }
-            }], 
+            }],
         // store user answers from prompt questions
         function (userAnswers) {
             this.appName = userAnswers.appName;
@@ -230,7 +230,7 @@ var llPrototype = yeoman.generators.Base.extend({
 
             // no base modernizr file in v3+
 
-        if(!this.includeFoundation) {
+        if(!this.includeFoundation && this.includeModernizr) {
 
             this.fs.copy(
                 this.templatePath('_modernizr.js'),
