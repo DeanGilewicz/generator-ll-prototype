@@ -71,7 +71,9 @@ gulp.task('minify-css', function() {
 		cssnano
 	];
 	return gulp.src('styles/sass/main.scss')
-		.pipe(sass({ outputStyle: 'expanded' }))
+		.pipe(sass({ outputStyle: 'expanded' })
+			.on('error', sass.logError)
+		)
 		.pipe(sourcemaps.init())
 		.pipe(postcss(processors))
 		.pipe(rename('main.min.css'))
