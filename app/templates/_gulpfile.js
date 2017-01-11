@@ -43,7 +43,10 @@ gulp.task('jshint', function() {
 gulp.task('minify-main-js', function() {
 	return gulp.src('scripts/main.js')
 		.pipe(sourcemaps.init())
-		.pipe(uglify())
+		.pipe(uglify().on('error', function(e) {
+			console.log(e.message);
+			return this.end();
+		}))
 		.pipe(rename('main.min.js'))
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('dist/js'))
