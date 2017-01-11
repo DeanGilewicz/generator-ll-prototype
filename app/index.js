@@ -22,7 +22,7 @@ var llPrototype = yeoman.generators.Base.extend({
     initializing: function() {
         // have Yeoman greet the user
         this.log(yosay(
-            chalk.green.bold('Welcome to the look-listen prototype generator! ') + chalk.white.bold('Let\'s get started...')
+            chalk.green.bold('Welcome to the ll prototype generator! ') + chalk.white.bold('Let\'s get started...')
         ));
     },
 
@@ -154,6 +154,11 @@ var llPrototype = yeoman.generators.Base.extend({
         this.fs.copy(
             this.templatePath('_.bowerrc'),
             this.destinationPath('.bowerrc')
+        )
+
+        this.fs.copy(
+            this.templatePath('_.jshintrc'),
+            this.destinationPath('.jshintrc')
         )
 
         // /data
