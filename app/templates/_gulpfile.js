@@ -9,7 +9,8 @@ var gulp = require('gulp'),
 	postcss = require('gulp-postcss'),
 	rename = require('gulp-rename'),
 	sass = require('gulp-sass'),
-	sourcemaps = require('gulp-sourcemaps'),
+	sourcemaps = require('gulp-sourcemaps'),<% if (includeES6) { %> 
+	babel = require('gulp-babel'), <% } %>
 	uglify = require('gulp-uglify');
 
 	// data = require('./data/data.json');
@@ -42,7 +43,13 @@ gulp.task('jshint', function() {
 
 gulp.task('minify-main-js', function() {
 	return gulp.src('scripts/main.js')
-		.pipe(sourcemaps.init())
+		.pipe(sourcemaps.init()) <% if (includeES6) { %> 
+		.pipe(babel({
+			presets: ['es2015']
+		}).on('error', function(e) {
+			console.log(e.message);
+			return this.end();
+		})) <% } %>
 		.pipe(uglify().on('error', function(e) {
 			console.log(e.message);
 			return this.end();
@@ -54,6 +61,7 @@ gulp.task('minify-main-js', function() {
 });
 
 	// place vendor js into dist folder
+
 <% if (includeFoundation || includeJQuery) { %>
 gulp.task('vendor-scripts', function() { <% if (includeFoundation) { %>
 	return gulp.src(['bower_components/modernizr/modernizr.js',
@@ -63,6 +71,7 @@ gulp.task('vendor-scripts', function() { <% if (includeFoundation) { %>
     .pipe(gulp.dest('dist/js/vendor'));
 });
 <% } %>
+
 
 // SASS
 
@@ -84,6 +93,7 @@ gulp.task('minify-css', function() {
 		.pipe(gulp.dest('dist/css'))
 		.pipe(livereload());
 });
+
 
 // HANDLEBARS
 

@@ -61,9 +61,14 @@ var llPrototype = yeoman.generators.Base.extend({
                 name: 'includeModernizr',
                 message: 'Would you like me to include Modernizr?',
                 default: true,
-                    when: function (answers) {
-                return answers.includeFoundation === false;
+                when: function (answers) {
+                    return answers.includeFoundation === false;
                 }
+            },  {
+                type: 'confirm',
+                name: 'includeES6',
+                message: 'Will you be using ES6?',
+                default: true
             }],
         // store user answers from prompt questions
         function (userAnswers) {
@@ -71,6 +76,7 @@ var llPrototype = yeoman.generators.Base.extend({
             this.includeFoundation = userAnswers.includeFoundation;
             this.includeJQuery = userAnswers.includeJQuery;
             this.includeModernizr = userAnswers.includeModernizr;
+            this.includeES6 = userAnswers.includeES6;
             
             // continue executing the next function
             done();
@@ -250,7 +256,8 @@ var llPrototype = yeoman.generators.Base.extend({
             includeFoundation: this.includeFoundation,
             includeNormalize: this.includeNormalize,
             includeModernizr: this.includeModernizr,
-            includeJQuery: this.includeJQuery
+            includeJQuery: this.includeJQuery,
+            includeES6: this.includeES6
         };
 
         // root
