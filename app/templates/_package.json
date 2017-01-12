@@ -1,6 +1,6 @@
 {
     "name": "<%= project_name %>",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "description": "prototyping generator for front end dev team",
     "repository": {},
     "dependencies": {},

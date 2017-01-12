@@ -162,11 +162,6 @@ var llPrototype = yeoman.generators.Base.extend({
             this.destinationPath('.bowerrc')
         )
 
-        this.fs.copy(
-            this.templatePath('_.jshintrc'),
-            this.destinationPath('.jshintrc')
-        )
-
         // /data
 
         this.fs.copy(
@@ -277,6 +272,12 @@ var llPrototype = yeoman.generators.Base.extend({
         this.fs.copyTpl(
             this.templatePath('_gulpfile.js'),
             this.destinationPath('Gulpfile.js'),
+            context
+        );
+
+        this.fs.copyTpl(
+            this.templatePath('_.jshintrc'),
+            this.destinationPath('.jshintrc'),
             context
         );
         

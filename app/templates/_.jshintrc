@@ -1,11 +1,13 @@
 {
 	"browser": true,
-	"devel": true,
-	"jquery": true,
+	"devel": true, <% if (includeFoundation || includeJQuery) { %>
+	"jquery": true, <% } %>
 	"eqeqeq": true,
 	"eqnull": true,
 	"undef": true,
 	"unused": true,
-	"maxdepth": 3,
-	"esversion": 5
+	"maxdepth": 3, <% if (includeES6) { %>
+	"esversion": 6,
+	"strict": true <% } else { %>
+	"esversion": 5 <% } %>
 }
