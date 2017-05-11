@@ -3,7 +3,7 @@
 
 # TEAM
 
-    Look Listen Front End Dev
+    Front End Dev
 
 # THANKS
 
@@ -15,6 +15,6 @@
     CSS3
     Sass
     jQuery
-    Modernizr
+    <% if (includeModernizr) { %>Modernizr<% } %>
     Normalize.css
     Gulp

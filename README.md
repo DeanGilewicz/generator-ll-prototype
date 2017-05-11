@@ -31,9 +31,10 @@ yo ll-prototype
 
 ### Options
 
-1) Include Foundation Grid
-2) Include jQuery (default included if user chooses to include foundation grid)
-3) Include Modernizr (default included if user chooses to include foundation grid)
+1) Include Foundation Grid (custom grid build)
+2) Include jQuery
+3) Include Modernizr (HTML5 Shiv)
+4) Include ES6
 
 
 ### Project Structure
@@ -50,6 +51,7 @@ yo ll-prototype
 	-> templates/
 	.bowerrc
 	.gitignore
+	.jshintrc
 	bower.json
 	Gulpfile.js
 	humans.txt
@@ -60,7 +62,7 @@ yo ll-prototype
 ** sass-cache
 
 - makes compiling faster
-- Sass caches parsed documents so that they can be reused without parsing them again unless they have changed.
+- Sass caches parsed documents so that they can be reused without parsing them again unless they have changed
 - git ignored
 
 ** bower_components/
@@ -69,8 +71,7 @@ yo ll-prototype
 - this will also be the location where bower writes tools / libraries to should user choose to add anything additional
 - git ignored
 - jQuery ... copied to dist/js/vendor/
-- modernizr ... copied to dist/js/vendor if foundation is selected by user
-- normalize-scss ... imported into main.scss
+- normalize-scss ... imported into /styles/sass/main.scss
 
 ** data/
 
@@ -98,7 +99,7 @@ yo ll-prototype
 
 ** styles/
 
-- where user sass is written
+- where user scss is written
 
 ** templates/
 
@@ -113,11 +114,18 @@ Please see comments in gulpfile.js for more information but basically Gulp will:
 
 - lint and minify js
 
+- transpile ES6 to ES5 if option chosen
+
 - move vendor js
 
 - compile and minify sass
 
-- compile handlebars templates (partials) into .html files
+- compile handlebars templates (and partials) into .html files
 
-- watch for any changes and includes livereload
+- watch for any changes
+
+- fires up a server so can view project locally at localhost:4000
+
+- includes livereload to increase productivity
+
 

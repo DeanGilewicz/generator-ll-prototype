@@ -60,18 +60,13 @@ gulp.task('minify-main-js', function() {
 		.pipe(livereload());
 });
 
+<% if (includeJQuery) { %>
 	// place vendor js into dist folder
-
-<% if (includeFoundation || includeJQuery) { %>
-gulp.task('vendor-scripts', function() { <% if (includeFoundation) { %>
-	return gulp.src(['bower_components/modernizr/modernizr.js',
-  					'bower_components/fastclick/lib/fastclick.js',
-  					'bower_components/jquery/dist/jquery.min.js' ]) <% } else if (includeJQuery) { %>
-	return gulp.src('bower_components/jquery/dist/jquery.min.js') <% } %>
+gulp.task('vendor-scripts', function() {
+	return gulp.src('bower_components/jquery/dist/jquery.min.js')
     .pipe(gulp.dest('dist/js/vendor'));
 });
 <% } %>
-
 
 // SASS
 
@@ -155,7 +150,7 @@ gulp.task('default', ['express', 'watch', 'jshint', 'minify-css', 'minify-main-j
 
 	// register initial gulp tasks
 
-gulp.task('build', [<% if (includeFoundation || includeJQuery) { %>'vendor-scripts', <% } %>'minify-css', 'minify-main-js', 'handlebars'], function() {
+gulp.task('build', [<% if (includeJQuery) { %>'vendor-scripts', <% } %>'minify-css', 'minify-main-js', 'handlebars'], function() {
 	console.log('Your development environment has been set up. Run gulp to watch and build your project!');
 });
 

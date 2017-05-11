@@ -39,32 +39,28 @@ var llPrototype = yeoman.generators.Base.extend({
             [{
                 type: 'input',
                 name: 'appName',
-                message: 'What is your project\'s name?',
+                message: 'What is your project\'s name (no spaces allowed)?',
                 default : this.appname
             }, {
+                // custom build - file - grid only
                 type: 'confirm',
                 name: 'includeFoundation',
-                message: 'Would you like me to include Foundation grid?',
+                message: 'Would you like me to include Foundation Grid?',
                 default: true
             }, {
-                // only ask if not using foundation since foundation comes with jQuery
+                // complete version - bower
                 type: 'confirm',
                 name: 'includeJQuery',
                 message: 'Would you like me to include jQuery?',
-                default: true,
-                when: function (answers) {
-                    return answers.includeFoundation === false;
-                }
+                default: true
             }, {
-                // only ask if not using foundation since foundation comes with Modernizr
+                // custom build - file - html5 shiv
                 type: 'confirm',
                 name: 'includeModernizr',
-                message: 'Would you like me to include Modernizr?',
-                default: true,
-                when: function (answers) {
-                    return answers.includeFoundation === false;
-                }
+                message: 'Would you like me to include Modernizr (html5shiv)?',
+                default: true
             },  {
+                // enable transpiling and linting of ES6
                 type: 'confirm',
                 name: 'includeES6',
                 message: 'Will you be using ES6?',
@@ -143,11 +139,6 @@ var llPrototype = yeoman.generators.Base.extend({
         )
 
         this.fs.copy(
-            this.templatePath('_humans.txt'),
-            this.destinationPath('humans.txt')
-        )
-
-        this.fs.copy(
             this.templatePath('_robots.txt'),
             this.destinationPath('robots.txt')
         )
@@ -169,12 +160,6 @@ var llPrototype = yeoman.generators.Base.extend({
             this.destinationPath('data/data.json')
         )
 
-        // /scripts
-
-        this.fs.copy(
-            this.templatePath('_main.js'),
-            this.destinationPath('scripts/main.js')
-        )
         
         // /styles/sass
 
@@ -186,6 +171,11 @@ var llPrototype = yeoman.generators.Base.extend({
         this.fs.copy(
             this.templatePath('_footer.scss'),
             this.destinationPath('styles/sass/_footer.scss')
+        )
+
+        this.fs.copy(
+            this.templatePath('_variables.scss'),
+            this.destinationPath('styles/sass/_variables.scss')
         )
 
         this.fs.copy(
@@ -202,6 +192,16 @@ var llPrototype = yeoman.generators.Base.extend({
             this.templatePath('_about.scss'),
             this.destinationPath('styles/sass/about/_index.scss')
         )
+
+        // no base foundation grid file in foundation sites so using custom build
+
+        if(this.includeFoundation) {
+
+            this.fs.copy(
+                this.templatePath('_foundationGrid.scss'),
+                this.destinationPath('styles/sass/_foundationGrid.scss')
+            )
+        }
 
         // /templates/about
 
@@ -234,9 +234,9 @@ var llPrototype = yeoman.generators.Base.extend({
             this.destinationPath('dist/js/vendor/console.js')
         )
 
-            // no base modernizr file in v3+
+            // no base modernizr file in v3+ so using custom build
 
-        if(!this.includeFoundation && this.includeModernizr) {
+        if(this.includeModernizr) {
 
             this.fs.copy(
                 this.templatePath('_modernizr.js'),
@@ -244,18 +244,32 @@ var llPrototype = yeoman.generators.Base.extend({
             )
         }
 
+
         // Store user input and variables and use them to render the templates
         
         var context = {
             project_name: this.appName,
             includeFoundation: this.includeFoundation,
-            includeNormalize: this.includeNormalize,
             includeModernizr: this.includeModernizr,
             includeJQuery: this.includeJQuery,
             includeES6: this.includeES6
         };
 
+        // /scripts
+
+        this.fs.copyTpl(
+            this.templatePath('_main.js'),
+            this.destinationPath('scripts/main.js'),
+            context
+        )
+
         // root
+
+        this.fs.copyTpl(
+            this.templatePath('_humans.txt'),
+            this.destinationPath('humans.txt'),
+            context
+        )
 
         this.fs.copyTpl(
             this.templatePath('_bower.json'),
@@ -336,15 +350,15 @@ var llPrototype = yeoman.generators.Base.extend({
 
         // install dependencies into bower.json file
 
-        if (this.includeFoundation) {
-            this.bowerInstall(['foundation'], { 'save': true });
-        }
-
         if (this.includeJQuery) {
             this.bowerInstall(['jquery'], { 'save': true });
         }
 
-        this.bowerInstall(['normalize-scss'], function () {
+        if (!this.includeFoundation) {
+            this.bowerInstall(['normalize-scss'], { 'save': true });
+        }
+
+        this.bowerInstall([], {}, function () {
             self.log(chalk.yellow('\n Bower packages installed, now installing node modules...\n'));
         });
 
