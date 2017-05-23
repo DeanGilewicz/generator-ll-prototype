@@ -13,9 +13,6 @@ var gulp = require('gulp'),
 	babel = require('gulp-babel'), <% } %>
 	uglify = require('gulp-uglify');
 
-	// data = require('./data/data.json');
-	// json data for templates - require does cache the result making it unsuitable to read/modify/read-again otherwise have to continually restart gulp to see updates to data
-
 // express server
 	// view on host computer -> localhost:4000
 	// view on mobile device -> in command line of computer run ifconfig, look for en0, en1 etc and "inet" number. Use this number plus port
@@ -31,33 +28,37 @@ gulp.task('express', function() {
 
 // JAVASCRIPT
 
-	// lint main js file
+	// lint js files
 
 gulp.task('jshint', function() {
-	return gulp.src('scripts/main.js')
+	return gulp.src('scripts/**/*')
 		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'));
 });
 
-	// minify main.js script - place into dist folder
+	// minifies js scripts - places into dist folder
 
 gulp.task('minify-main-js', function() {
-	return gulp.src('scripts/main.js')
-		.pipe(sourcemaps.init()) <% if (includeES6) { %> 
-		.pipe(babel({
-			presets: ['es2015']
-		}).on('error', function(e) {
-			console.log(e.message);
-			return this.end();
-		})) <% } %>
-		.pipe(uglify().on('error', function(e) {
-			console.log(e.message);
-			return this.end();
-		}))
-		.pipe(rename('main.min.js'))
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('dist/js'))
-		.pipe(livereload());
+	del(['dist/js/**/*', '!dist/{js/vendor,js/vendor/**/*}'], function() {
+		return gulp.src('scripts/**/*')
+			.pipe(sourcemaps.init()) <% if (includeES6) { %> 
+			.pipe(babel({
+				presets: ['es2015']
+			}).on('error', function(e) {
+				console.log(e.message);
+				return this.end();
+			})) <% } %>
+			.pipe(uglify().on('error', function(e) {
+				console.log(e.message);
+				return this.end();
+			}))
+			.pipe(rename(function(path) {
+				path.extname = '.min.js';
+			}))
+			.pipe(sourcemaps.write('./'))
+			.pipe(gulp.dest('dist/js'))
+			.pipe(livereload());
+	});
 });
 
 <% if (includeJQuery) { %>
@@ -73,20 +74,22 @@ gulp.task('vendor-scripts', function() {
 	// compile sass into css and minify - place into dist folder
 
 gulp.task('minify-css', function() {
-	var processors = [
-		autoprefixer({browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4']}),
-		cssnano
-	];
-	return gulp.src('styles/sass/main.scss')
-		.pipe(sass({ outputStyle: 'expanded' })
-			.on('error', sass.logError)
-		)
-		.pipe(sourcemaps.init())
-		.pipe(postcss(processors))
-		.pipe(rename('main.min.css'))
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('dist/css'))
-		.pipe(livereload());
+	del(['dist/css/**/*'], function() {
+		var processors = [
+			autoprefixer({browsers: ['last 4 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4']}),
+			cssnano
+		];
+		return gulp.src('styles/sass/main.scss')
+			.pipe(sass({ outputStyle: 'expanded' })
+				.on('error', sass.logError)
+			)
+			.pipe(sourcemaps.init())
+			.pipe(postcss(processors))
+			.pipe(rename('main.min.css'))
+			.pipe(sourcemaps.write('./'))
+			.pipe(gulp.dest('dist/css'))
+			.pipe(livereload());
+	});
 });
 
 
@@ -96,36 +99,48 @@ gulp.task('minify-css', function() {
 	// compile handlebars templates - place in dist as .html files
 
 gulp.task('handlebars', function () {
-	var data = JSON.parse(fs.readFileSync('data/data.json'));
-	// var templateData = {}, // data to pass into templates - using ./data/data.json above
-	options = {
-		ignorePartials: true, // ignores any unknown partials. Useful if you only want to handle part of the file
-		// partials : {}, // Javascript object that will fill in partials using strings
-		batch : ['partials'] // Javascript array of filepaths to use as partials
-		// helpers : {
-		//     capitals : function(str){
-		//         return str.toUpperCase();
-		//     }
-		// } // javascript functions to stand in for helpers used in the handlebars files
-	};
-	return gulp.src('templates/**/*.hbs')
-		.pipe(handlebars(data, options)) // using ./data/data.json file
-		.pipe(rename(function(path) {
-			path.extname = '.html';
-		}))
-		.pipe(gulp.dest('dist/'))
-		.pipe(livereload())
+	del(['dist/**/*.html'], function() {
+		var data = JSON.parse(fs.readFileSync('data/data.json'));
+		// var templateData = {}, // data to pass into templates - using ./data/data.json above
+		options = {
+			ignorePartials: true, // ignores any unknown partials. Useful if you only want to handle part of the file
+			// partials : {}, // Javascript object that will fill in partials using strings
+			batch : ['partials'] // Javascript array of filepaths to use as partials
+			// helpers : {
+			//     capitals : function(str){
+			//         return str.toUpperCase();
+			//     }
+			// } // javascript functions to stand in for helpers used in the handlebars files
+		};
+		return gulp.src('templates/**/*.hbs')
+			.pipe(handlebars(data, options))
+			.pipe(rename(function(path) {
+				path.extname = '.html';
+			}))
+			.pipe(gulp.dest('dist/'))
+			.pipe(livereload())
+	});
 });
 
 
-// DELETE
+// ASSETS
 
-	// remove all dist files when needed
+	// copy fonts folder into dist/
 
-gulp.task('clean', function() {
-	del([
-		'dist'
-	]);
+gulp.task('assets-fonts', function() { 
+	del(['dist/fonts/**/*'], function() {
+		return gulp.src(['assets/fonts/**/*'])
+	    	.pipe(gulp.dest('dist/fonts/'));
+	});
+});
+
+	// copy images folder into dist/
+
+gulp.task('assets-images', function() { 
+	del(['dist/images/**/*'], function() {
+		return gulp.src(['assets/images/**/*'])
+    		.pipe(gulp.dest('dist/images/'));
+	});
 });
 
 
@@ -136,21 +151,22 @@ gulp.task('clean', function() {
 gulp.task('watch', function() {
 	livereload.listen({ quiet: true }); // disable console log of reloaded files
 	gulp.watch(['styles/sass/**'], ['minify-css']);
-	gulp.watch(['scripts/main.js'], ['jshint', 'minify-main-js']);
+	gulp.watch(['scripts/**/*'], ['jshint', 'minify-main-js']);
 	gulp.watch(['templates/**'], ['handlebars']);
 	gulp.watch(['partials/*.hbs'], ['handlebars']);
 	gulp.watch(['data/data.json'], ['handlebars']);
+	gulp.watch(['assets/**/*'], ['assets-fonts', 'assets-images']);
 });
 
 	// register default gulp tasks
 
-gulp.task('default', ['express', 'watch', 'jshint', 'minify-css', 'minify-main-js', 'handlebars'], function() {
+gulp.task('default', ['express', 'watch', 'jshint', 'minify-css', 'minify-main-js', 'handlebars', 'assets-fonts', 'assets-images'], function() {
 	console.log('gulp is watching and will rebuild when changes are made...');
 });
 
 	// register initial gulp tasks
 
-gulp.task('build', [<% if (includeJQuery) { %>'vendor-scripts', <% } %>'minify-css', 'minify-main-js', 'handlebars'], function() {
+gulp.task('build', [<% if (includeJQuery) { %>'vendor-scripts', <% } %>'minify-css', 'minify-main-js', 'handlebars', 'assets-fonts', 'assets-images'], function() {
 	console.log('Your development environment has been set up. Run gulp to watch and build your project!');
 });
 

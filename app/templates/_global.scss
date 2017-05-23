@@ -1,7 +1,16 @@
 body {
-	width: 80%;
+	background-color: $white;
+	color: $black;
+}
+
+a {
+	color: $green;
+}
+
+.main_container {
+	max-width: 1000px;
+	min-height: 100%;
+	min-height: 50vh;
 	margin: 0 auto;
-	padding: 30px;
-	background-color: $grey;
-	color: $text;
+	padding: 65px 20px;
 }

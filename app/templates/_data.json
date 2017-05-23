@@ -5,7 +5,7 @@
 	},
 	"about": {
 		"meta-title": "about page",
-		"meta-description": "This description is coming from the data json file.",
+		"meta-description": "This description is coming from the data json file",
 		"title": "This is the About Page"
 	}
 }

@@ -8,44 +8,36 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <header>
-
-			<p>
-				This is the header
-			</p>
-
+        	<a href="/about">About Page</a>
+			<p>This is the header</p>
         </header>
 
-        <a href="/about">About Page</a>
+        <div class="main_container">
 
-        <h1>Enjoy building your <%= project_name %> project!</h1>
+        	<h1>Enjoy building your <%= project_name %> project!</h1>
 
-        <p>
-        	Included in this generator ...
-        </p>
+        	<p>Included in this generator ...</p>
 
-		<ul>
-			<li>HTML5 template</li>
-			<li>normalize scss</li>
-			<li>sass(scss)</li>
-			<li>console js</li>
-			<% if (includeFoundation) { %>
-				<li>foundation grid</li>
-				<li>jQuery</li>
-			<% } %>
-			<% if (includeModernizr) { %><li>modernizr</li><% } %>
-			<% if (includeJQuery) { %><li>jQuery</li><% } %>
-			<li>JSON data</li>
-			<li>Handlebars partials</li>
-			<li>Gulp</li>
-		</ul>
+			<ul>
+				<li>HTML5</li>
+				<li>normalize scss</li>
+				<li>sass(scss)</li>
+				<li>console js</li>
+				<% if (includeFoundation) { %>
+					<li>foundation grid</li>
+				<% } %>
+				<% if (includeModernizr) { %><li>modernizr</li><% } %>
+				<% if (includeJQuery) { %><li>jQuery</li><% } %>
+				<li>JSON data</li>
+				<li>handlebars templates</li>
+				<li>gulp</li>
+			</ul>
 		
-		<p>
-			To use livereload, ensure your browser has livereload enabled in settings.
-		</p>
+			<p>To use livereload, ensure your browser has livereload enabled in settings.</p>
 
-		<p>
-			Don't forget to run Gulp in the command line!
-		</p>
+			<p>Don't forget to run Gulp in the command line!</p>
+
+		</div>
 		
 		{{> footer}}
 

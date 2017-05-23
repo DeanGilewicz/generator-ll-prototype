@@ -97,6 +97,11 @@ var llPrototype = yeoman.generators.Base.extend({
         // app dir
         // user creates the folder and app is scaffolded inside
 
+        // assets dir
+        mkdirp('assets');
+        mkdirp('assets/fonts');
+        mkdirp('assets/images');
+
         // data dir
         mkdirp('data');
         
